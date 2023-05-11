@@ -12,6 +12,8 @@ describe('Central de Atendimento ao Cliente TAT', () => {
     })
     it('Preencha os campos obrigatorios e envie o formulario', () => { // only executa apenas este teste
         const longtext = ('Software é uma sequência de instruções escritas para serem interpretadas por um computador para executar tarefas específicas. Também pode ser definido como os programas, dados e instruções que comandam o funcionamento de um computador, smartphone, tablet e outros dispositivos eletrônicos.')
+        
+        cy.clock() // congelou o time do navegador
         cy.get('#firstName').type('Cíntia').should('have.value', 'Cíntia')
         cy.get('#lastName').type('Silva Galvao').should('have.value','Silva Galvao')
         cy.get('#email').type('cintia@gmail.com').should('have.value', 'cintia@gmail.com')
@@ -20,27 +22,37 @@ describe('Central de Atendimento ao Cliente TAT', () => {
         cy.get('#open-text-area').type(longtext, {delay: 0})
         cy.contains('button', 'Enviar').click()
         cy.get('.success').should('be.visible')
+        cy.tick(3000) // avançou 3 seconds
+        cy.get('.success').should('not.be.visible')
 
     })
 
     it('Fluxo de exceção E-maail', () => {
         const longtext = ('Software é uma sequência de instruções escritas para serem')
+
+        cy.clock()
         cy.get('#firstName').type('Cíntia').should('have.value', 'Cíntia')
         cy.get('#lastName').type('Silva Galvao').should('have.value','Silva Galvao')
         cy.get('#open-text-area').type(longtext, {delay: 0})
         cy.get('#email').type('jhgjhfdjhgjfdf,com')
         cy.contains('button', 'Enviar').click()
         cy.get('.error').should('be.visible')
+        cy.tick(3000)
+        cy.get('.error').should('not.be.visible')
 
     })
 
+   Cypress._.times(3, () => { // executa o cenario de teste 3 vezes
     it('Validação Campo telefone', () => {
         cy.get('#phone').type('hjkhjkhkjhj').should('not.have.value','hjkhjkhkjhj')
 
     })
+   })
 
     it('Telefone sendo o principal meio de contato', () => {
         const longtext = ('Software é uma sequência de instruções escritas para serem interpretadas por um computador para executar tarefas específicas. Também pode ser definido como os programas, dados e instruções que comandam o funcionamento de um computador, smartphone, tablet e outros dispositivos eletrônicos.')
+        
+        cy.clock()
         cy.get('#firstName').type('Cíntia').should('have.value', 'Cíntia')
         cy.get('#lastName').type('Silva Galvao').should('have.value','Silva Galvao')
         cy.get('#email').type('cintia@gmail.com').should('have.value', 'cintia@gmail.com')
@@ -49,6 +61,8 @@ describe('Central de Atendimento ao Cliente TAT', () => {
         cy.get('#phone-checkbox').check()
         cy.contains('button', 'Enviar').click() // encontrar um botão que tenha o texto Enviar
         cy.get('.error').should('be.visible')
+        cy.tick(30000)
+        cy.get('.error').should('not.be.visible')
     })
 
     it('Preenche e limpa os campos', () => {
@@ -71,8 +85,12 @@ describe('Central de Atendimento ao Cliente TAT', () => {
         })
 
         it('Envio de comandos costumizados', () => {
+        cy.clock()
+
         cy.fillMandatoryFieldsAndSubmit()
         cy.get('.success').should('be.visible')
+        cy.tick(3000)
+        cy.get('.success').should('not.be.visible')
         })
 
         it('Select produtos', () => {
@@ -153,6 +171,38 @@ describe('Central de Atendimento ao Cliente TAT', () => {
             cy.contains('Talking About Testing').should('be.visible')
         })
 
+        it('exibe e esconde as mensagens de sucesso e erro usando o .invoke', () => {
+            cy.get('.success')
+              .should('not.be.visible')
+              .invoke('show') // mostrar a mensagem
+              .should('be.visible')
+              .and('contain', 'Mensagem enviada com sucesso.')
+              .invoke('hide') // esconder mensagem
+              .should('not.be.visible')
+            cy.get('.error')
+              .should('not.be.visible')
+              .invoke('show')
+              .should('be.visible')
+              .and('contain', 'Valide os campos obrigatórios!')
+              .invoke('hide')
+              .should('not.be.visible')
+          })
+
+          it('invocar dados no campo', () => {
+
+            const longText = Cypress._.repeat('123oi', 20) // multiplica a quantidade de caracter por 20
+
+            cy.get('#open-text-area')
+            .invoke('val', longText)
+            .should('have.value', longText)
+          })
+
+          it.only('gato escondido', () => {
+            cy.get('#cat')
+              .should('not.be.visible')
+              .invoke('show') // mostrar a mensagem
+              .should('be.visible')
+          })
 
   })
   
