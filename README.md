@@ -23,15 +23,7 @@ Or, run `npm run cy:open` to open Cypress in interactive mode.
 
 ***************************************************************************************
 
-# Testes automatizados com Cypress - Básico
-
-👋 Seja bem-vindo(a)!
-
-É muito bom tê-lo(a) aqui. Tenho certeza que você vai adorar este curso. ❤️
-
-## O que você vai aprender
-
-Durante o curso de testes automatizados com Cypress (básico), você vai aprender:
+# Testes automatizados com Cypress, o que será implementado
 
 - Como configurar um projeto Cypress do zero
 - Como visitar páginas locais e remotas
